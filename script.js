@@ -132,12 +132,17 @@ btnLogin.addEventListener("click", function (e) {
     //display movements
     containerApp.style.opacity = 100;
 
+    //clear the imput fields
+
+    inputLoginUsername.value = inputLoginPin.value = "";
+
+    inputLoginPin.blur();
+    //display movements
     displayMovements(currentAccount.movements);
     //display balance
     calcDisplayBalance(currentAccount.movements);
     //display summary
     calcDisplaySummary(currentAccount.movements);
-    //display summary
   }
 });
 // console.log(accounts);
