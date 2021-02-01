@@ -83,24 +83,23 @@ const calcDisplayBalance = function (movements) {
   labelBalance.textContent = `${balance} EUR`;
 };
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov);
   labelSumIn.textContent = `${incomes} euro`;
-  const out = movements
+  const out = acc.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)} euros`;
-  const interest = movements
+  const interest = acc.movements
     .filter((mov) => mov > 0)
-    .map((deposit) => (deposit * 1.2) / 100)
+    .map((deposit) => (deposit * acc.interestRate) / 100)
     .filter((dep) => dep >= 1)
     .reduce((acc, dep) => acc + dep, 0);
   labelSumInterest.textContent = `${Math.abs(interest)} euros`;
 };
 
-calcDisplaySummary(account1.movements);
 const createUserNames = function (accs) {
   accs.forEach(function (acc) {
     acc.userName = acc.owner
@@ -122,7 +121,7 @@ btnLogin.addEventListener("click", function (e) {
   currentAccount = accounts.find(
     (acc) => acc.userName === inputLoginUsername.value
   );
-  // console.log(currentAccount);
+  console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //display ui and welcome message
@@ -142,7 +141,7 @@ btnLogin.addEventListener("click", function (e) {
     //display balance
     calcDisplayBalance(currentAccount.movements);
     //display summary
-    calcDisplaySummary(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
   }
 });
 // console.log(accounts);
@@ -150,13 +149,13 @@ btnLogin.addEventListener("click", function (e) {
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ["USD", "United States dollar"],
-  ["EUR", "Euro"],
-  ["GBP", "Pound sterling"],
-]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const currencies = new Map([
+//   ["USD", "United States dollar"],
+//   ["EUR", "Euro"],
+//   ["GBP", "Pound sterling"],
+// ]);
+//
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -196,11 +195,11 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // }
 
 // console.log(balance1);
-
-const max = movements.reduce((acc, mov) => {
-  if (acc > mov) return acc;
-  else return mov;
-}, movements[0]);
+//
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   else return mov;
+// }, movements[0]);
 // console.log(max);\\
 
 /*
