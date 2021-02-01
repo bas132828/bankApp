@@ -164,6 +164,22 @@ btnTransfer.addEventListener('click', function(e) {
   }
 })
 
+btnLoan.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount> 0 && currentAccount.movements.some(mov => mov >= amount* 0.1)) {
+    // add movement
+    currentAccount.movements.push(amount);
+
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+})
+
+
+
 
 btnClose.addEventListener('click', function(e) {
   e.preventDefault();
@@ -191,7 +207,6 @@ btnClose.addEventListener('click', function(e) {
 //   ["GBP", "Pound sterling"],
 // ]);
 //
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -239,6 +254,37 @@ btnClose.addEventListener('click', function(e) {
 // console.log(max);\\
 
 /*
+
+
+consolo.log()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Coding Challenge #2
 Let's go back to Julia and Kate's study about dogs. This time, they want to convert
 dog ages to human ages and calculate the average age of the dogs in their study.
@@ -292,3 +338,32 @@ calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 // };
 
 // console.log(calcChain([5, 2, 4, 1, 15, 8, 3]));
+
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+console.log(movements);
+//equality
+console.log(movements.includes(-130));
+//condition
+const anyDeposits = movements.some(mov => mov>5555)
+console.log(anyDeposits)
+
+console.log(account2.movements.every(mov => mov> 0))
+
+const deposit = mov=> mov>0;
+
+console.log(movements.some(deposit))
+
+const arr = [[2,3],[1,2]];
+console.log(arr.flat ())
+
+
+
+const accountMovements = accounts.map(acc => acc.movements)
+
+console.log(accountMovements.flat().reduce((acc, mov) => acc+mov, 0))
+
+
+
+const accountMovements2 = accounts.flatMap(acc => acc.movements).reduce((acc, mov) => acc+mov, 0)
