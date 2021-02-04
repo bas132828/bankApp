@@ -360,3 +360,11 @@ const owners = ["Jonas", "Zach", "Adam", "Martha"];
 console.log(owners.sort());
 movements.sort((a, b) => b - a);
 console.log(movements);
+
+///////////////////////////////////
+
+const z = Array.from(
+  { length: 100 },
+  (cur, i) => (cur = Math.trunc(Math.random() * 6 + 1))
+);
+console.log(z);
