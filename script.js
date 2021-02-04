@@ -61,9 +61,12 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function(movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function(mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -78,12 +81,12 @@ const displayMovements = function(movements) {
   });
 };
 
-const calcDisplayBalance = function(acc) {
+const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${acc.balance} EUR`;
 };
 
-const calcDisplaySummary = function(acc) {
+const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov);
@@ -100,8 +103,8 @@ const calcDisplaySummary = function(acc) {
   labelSumInterest.textContent = `${Math.abs(interest)} euros`;
 };
 
-const createUserNames = function(accs) {
-  accs.forEach(function(acc) {
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
     acc.userName = acc.owner
       .toLocaleLowerCase()
       .split(" ")
@@ -111,24 +114,23 @@ const createUserNames = function(accs) {
 };
 
 createUserNames(accounts);
-const updateUI = function(acc) {
-
+const updateUI = function (acc) {
   displayMovements(currentAccount.movements);
   //display balance
   calcDisplayBalance(currentAccount);
   //display summary
   calcDisplaySummary(currentAccount);
-}
+};
 //Create event handlers
 let currentAccount;
 
-btnLogin.addEventListener("click", function(e) {
+btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
 
   currentAccount = accounts.find(
     (acc) => acc.userName === inputLoginUsername.value
   );
-  inputTransferAmount.value = inputTransferTo.value = '';
+  inputTransferAmount.value = inputTransferTo.value = "";
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //display ui and welcome message
@@ -147,55 +149,70 @@ btnLogin.addEventListener("click", function(e) {
 
     updateUI(currentAccount);
   }
-
 });
 
-
-btnTransfer.addEventListener('click', function(e) {
+btnTransfer.addEventListener("click", function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
-  const receiverAcc = accounts.find(acc => acc.userName === inputTransferTo.value);
+  const receiverAcc = accounts.find(
+    (acc) => acc.userName === inputTransferTo.value
+  );
   console.log(amount, receiverAcc);
 
-  if (amount > 0 && amount <= currentAccount.balance && receiverAcc && receiverAcc?.userName !== currentAccount.userName) {
+  if (
+    amount > 0 &&
+    amount <= currentAccount.balance &&
+    receiverAcc &&
+    receiverAcc?.userName !== currentAccount.userName
+  ) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     updateUI(currentAccount);
   }
-})
+});
 
-btnLoan.addEventListener('click', function(e){
+btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
   const amount = Number(inputLoanAmount.value);
 
-  if (amount> 0 && currentAccount.movements.some(mov => mov >= amount* 0.1)) {
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
     // add movement
     currentAccount.movements.push(amount);
 
     updateUI(currentAccount);
   }
-  inputLoanAmount.value = '';
-})
+  inputLoanAmount.value = "";
+});
 
-
-
-
-btnClose.addEventListener('click', function(e) {
+btnClose.addEventListener("click", function (e) {
   e.preventDefault();
 
-  if (inputCloseUsername.value === currentAccount.userName && Number(inputClosePin.value) === currentAccount.pin) {
-    const index = accounts.findIndex(acc => acc.userName === currentAccount.userName);
+  if (
+    inputCloseUsername.value === currentAccount.userName &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.userName === currentAccount.userName
+    );
 
     accounts.splice(index, 1);
     containerApp.style.opacity = 0;
   }
 
-  inputCloseUsername.value = currentAccount.userName = '';
+  inputCloseUsername.value = currentAccount.userName = "";
+});
 
-})
+let sorted = false;
 
-
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 // console.log(accounts);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -256,35 +273,6 @@ btnClose.addEventListener('click', function(e) {
 /*
 
 
-consolo.log()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Coding Challenge #2
 Let's go back to Julia and Kate's study about dogs. This time, they want to convert
 dog ages to human ages and calculate the average age of the dogs in their study.
@@ -339,31 +327,36 @@ calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 
 // console.log(calcChain([5, 2, 4, 1, 15, 8, 3]));
 
-
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 console.log(movements);
 //equality
 console.log(movements.includes(-130));
 //condition
-const anyDeposits = movements.some(mov => mov>5555)
-console.log(anyDeposits)
+const anyDeposits = movements.some((mov) => mov > 5555);
+console.log(anyDeposits);
 
-console.log(account2.movements.every(mov => mov> 0))
+console.log(account2.movements.every((mov) => mov > 0));
 
-const deposit = mov=> mov>0;
+const deposit = (mov) => mov > 0;
 
-console.log(movements.some(deposit))
+console.log(movements.some(deposit));
 
-const arr = [[2,3],[1,2]];
-console.log(arr.flat ())
+const arr = [
+  [2, 3],
+  [1, 2],
+];
+console.log(arr.flat());
 
+const accountMovements = accounts.map((acc) => acc.movements);
 
+console.log(accountMovements.flat().reduce((acc, mov) => acc + mov, 0));
 
-const accountMovements = accounts.map(acc => acc.movements)
+const accountMovements2 = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
 
-console.log(accountMovements.flat().reduce((acc, mov) => acc+mov, 0))
-
-
-
-const accountMovements2 = accounts.flatMap(acc => acc.movements).reduce((acc, mov) => acc+mov, 0)
+const owners = ["Jonas", "Zach", "Adam", "Martha"];
+console.log(owners.sort());
+movements.sort((a, b) => b - a);
+console.log(movements);
