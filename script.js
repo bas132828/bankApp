@@ -94,7 +94,7 @@ const displayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +104,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out.toFixed(2))}€`;
 
   const interest = acc.movements
     .filter((mov) => mov > 0)
@@ -126,7 +126,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -206,7 +206,7 @@ btnTransfer.addEventListener("click", function (e) {
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (
     amount > 0 &&
@@ -256,3 +256,30 @@ btnSort.addEventListener("click", function (e) {
 // LECTURES
 const randomInt = (min, max) =>
   Math.floor(Math.random() * (max - min) + 1) + min;
+
+// labelBalance.addEventListener("click", function () {
+//   [...document.querySelectorAll(".movements_row")].forEach(function (row, i) {
+//     if (i % 2 === 0) row.style.backgroundColor = "red";
+//   });
+// });
+
+labelBalance.addEventListener("click", function () {
+  [...document.querySelectorAll(".movements__row")].forEach(function (row, i) {
+    // 0, 2, 4, 6
+    if (i % 2 === 0) row.style.backgroundColor = "orangered";
+    // 0, 3, 6, 9
+    if (i % 3 === 0) row.style.backgroundColor = "blue";
+  });
+});
+
+// console.log(new Date(account1.movementsDates[0]));
+
+// console.log(new Date(2037, 9, 19, 15, 23, 5));
+// console.log(new Date(100000000000000));
+
+const future = new Date(2037, 9, 19, 15, 23);
+console.log(future);
+
+console.log(future.getFullYear());
+console.log(future.getMonth());
+console.log(future.getDate());
